@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bot News — BriNovs FX Engine</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="news.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ═══════════════════ HEADER ═══════════════════ -->
+  <header class="header glass-border">
+    <div class="header-brand">
+      <img src="https://cdn.phototourl.com/free/2026-04-03-cfdc5ddf-4cfa-4d61-b9bd-ea00ff47f1f6.png" alt="BriNovs Logo" class="brand-logo" />
+      <div class="brand-name-box glass-mini">
+        <div class="brand-text">
+          <span class="brand-line1">BriNovs <span class="fx-green">FX</span></span>
+          <span class="brand-line2">Engine</span>
+        </div>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <a href="index.html"   class="nav-tab">Dashboard</a>
+      <a href="#"            class="nav-tab">Strategies</a>
+      <a href="watcher.html" class="nav-tab">Signal</a>
+    </nav>
+    <div class="header-right">
+      <div class="user-profile glass-mini">
+        <svg class="user-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="15" r="8" fill="#8aa8c8"/>
+          <ellipse cx="20" cy="36" rx="14" ry="9" fill="#8aa8c8"/>
+        </svg>
+        <span class="user-label" id="header-user-label">User</span>
+        <button class="menu-lines" onclick="window.location.href='userpanel.html'" aria-label="User Panel">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="clock-block">
+        <div class="clock-timezone-row">
+          <div class="clock-display">
+            <span id="clock-time" class="digital-time">00:00:00</span>
+          </div>
+          <select id="tz-select" class="tz-toggle glass-mini">
+            <option value="Africa/Nairobi">EAT</option>
+            <option value="Europe/London">GMT</option>
+            <option value="UTC">UTC</option>
+            <option value="Africa/Harare">CAT</option>
+          </select>
+        </div>
+        <div class="clock-date">
+          <span id="clock-date" class="digital-date">00/00/0000</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════ NEWS BODY ═══════════════════ -->
+  <main class="news-main">
+
+    <!-- PAGE TITLE -->
+    <div class="news-title-row">
+      <div class="news-title-left">
+        <span class="news-title-icon">📰</span>
+        <div>
+          <h1 class="news-page-title">BOT NEWS &amp; REPORT</h1>
+          <p class="news-page-sub">Live trading activity — manual sessions &amp; AutoRun</p>
+        </div>
+      </div>
+      <div class="news-title-right">
+        <!-- Live bot status pill -->
+        <div class="news-bot-pill glass-mini" id="news-bot-pill">
+          <span class="nbp-dot" id="nbp-dot"></span>
+          <span class="nbp-text" id="nbp-text">OFFLINE</span>
+        </div>
+        <button class="fx-btn news-back-btn" onclick="window.location.href='index.html'">
+          ← Dashboard
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB SWITCHER -->
+    <div class="news-tabs glass-box">
+      <button class="news-tab active" data-tab="all"     id="tab-all">All Activity</button>
+      <button class="news-tab"        data-tab="manual"  id="tab-manual">Manual Trading</button>
+      <button class="news-tab"        data-tab="autorun" id="tab-autorun">AutoRun</button>
+    </div>
+
+    <!-- ALL ACTIVITY TAB -->
+    <div class="news-tab-content" id="content-all">
+
+      <!-- Summary stats bar -->
+      <div class="news-summary-bar glass-box" id="summary-all">
+        <div class="nsb-stat"><span class="nsb-val" id="all-trades">0</span><span class="nsb-label">TRADES</span></div>
+        <div class="nsb-stat"><span class="nsb-val green" id="all-wins">0</span><span class="nsb-label">WINS</span></div>
+        <div class="nsb-stat"><span class="nsb-val red" id="all-losses">0</span><span class="nsb-label">LOSSES</span></div>
+        <div class="nsb-stat"><span class="nsb-val yellow" id="all-wr">—%</span><span class="nsb-label">WIN RATE</span></div>
+        <div class="nsb-stat"><span class="nsb-val" id="all-pl">$0.00</span><span class="nsb-label">NET P&amp;L</span></div>
+        <div class="nsb-stat"><span class="nsb-val" id="all-balance">—</span><span class="nsb-label">BALANCE</span></div>
+      </div>
+
+      <!-- Feed -->
+      <div class="news-feed-wrap glass-box">
+        <div class="news-feed-header">
+          <span class="pulse-dot" id="all-pulse"></span>
+          <span class="news-feed-title">LIVE ACTIVITY FEED</span>
+          <button class="news-clear-btn" id="clear-all-btn">Clear</button>
+        </div>
+        <div class="news-feed" id="news-feed-all">
+          <div class="news-empty" id="news-empty-all">
+            <span class="news-empty-icon">📡</span>
+            <span class="news-empty-text">No bot activity yet.<br/>Start a manual session or enable AutoRun from the Dashboard.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trade table -->
+      <div class="news-section-label">
+        <span class="nsl-dot"></span> TRADE HISTORY
+      </div>
+      <div class="news-table-wrap glass-box">
+        <table class="news-table" id="table-all">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Mode</th>
+              <th>Market</th>
+              <th>Dir</th>
+              <th>Stake</th>
+              <th>Outcome</th>
+              <th>P&amp;L</th>
+              <th>Conf</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-all">
+            <tr class="table-empty-row"><td colspan="8">No trades recorded yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- MANUAL TRADING TAB -->
+    <div class="news-tab-content hidden" id="content-manual">
+
+      <div class="news-summary-bar glass-box" id="summary-manual">
+        <div class="nsb-stat"><span class="nsb-val" id="m-trades">0</span><span class="nsb-label">TRADES</span></div>
+        <div class="nsb-stat"><span class="nsb-val green" id="m-wins">0</span><span class="nsb-label">WINS</span></div>
+        <div class="nsb-stat"><span class="nsb-val red" id="m-losses">0</span><span class="nsb-label">LOSSES</span></div>
+        <div class="nsb-stat"><span class="nsb-val yellow" id="m-wr">—%</span><span class="nsb-label">WIN RATE</span></div>
+        <div class="nsb-stat"><span class="nsb-val" id="m-pl">$0.00</span><span class="nsb-label">NET P&amp;L</span></div>
+        <div class="nsb-stat">
+          <span class="nsb-val" id="m-runs">0 / 0</span>
+          <span class="nsb-label">RUNS</span>
+        </div>
+      </div>
+
+      <div class="news-feed-wrap glass-box">
+        <div class="news-feed-header">
+          <span class="pulse-dot"></span>
+          <span class="news-feed-title">MANUAL SESSION FEED</span>
+          <button class="news-clear-btn" id="clear-manual-btn">Clear</button>
+        </div>
+        <div class="news-feed" id="news-feed-manual">
+          <div class="news-empty">
+            <span class="news-empty-icon">🖐</span>
+            <span class="news-empty-text">No manual session active.<br/>Press START on the Dashboard to begin.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="news-section-label"><span class="nsl-dot"></span> MANUAL TRADE HISTORY</div>
+      <div class="news-table-wrap glass-box">
+        <table class="news-table" id="table-manual">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Market</th>
+              <th>Dir</th>
+              <th>Stake</th>
+              <th>Outcome</th>
+              <th>P&amp;L</th>
+              <th>Conf</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-manual">
+            <tr class="table-empty-row"><td colspan="7">No manual trades yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- AUTORUN TAB -->
+    <div class="news-tab-content hidden" id="content-autorun">
+
+      <div class="news-summary-bar glass-box" id="summary-autorun">
+        <div class="nsb-stat">
+          <span class="nsb-val autorun-status-val" id="ar-status">DISABLED</span>
+          <span class="nsb-label">STATUS</span>
+        </div>
+        <div class="nsb-stat"><span class="nsb-val" id="ar-trades">0</span><span class="nsb-label">TRADES</span></div>
+        <div class="nsb-stat"><span class="nsb-val green" id="ar-wins">0</span><span class="nsb-label">WINS</span></div>
+        <div class="nsb-stat"><span class="nsb-val red" id="ar-losses">0</span><span class="nsb-label">LOSSES</span></div>
+        <div class="nsb-stat"><span class="nsb-val yellow" id="ar-wr">—%</span><span class="nsb-label">WIN RATE</span></div>
+        <div class="nsb-stat"><span class="nsb-val" id="ar-pl">$0.00</span><span class="nsb-label">NET P&amp;L</span></div>
+      </div>
+
+      <div class="news-feed-wrap glass-box">
+        <div class="news-feed-header">
+          <span class="pulse-dot" id="ar-pulse"></span>
+          <span class="news-feed-title">AUTORUN FEED</span>
+          <button class="news-clear-btn" id="clear-autorun-btn">Clear</button>
+        </div>
+        <div class="news-feed" id="news-feed-autorun">
+          <div class="news-empty">
+            <span class="news-empty-icon">🤖</span>
+            <span class="news-empty-text">AutoRun is not active.<br/>Enable it from the Dashboard to trade 24/7.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="news-section-label"><span class="nsl-dot"></span> AUTORUN TRADE HISTORY</div>
+      <div class="news-table-wrap glass-box">
+        <table class="news-table" id="table-autorun">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Market</th>
+              <th>Dir</th>
+              <th>Stake</th>
+              <th>Outcome</th>
+              <th>P&amp;L</th>
+              <th>Conf</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-autorun">
+            <tr class="table-empty-row"><td colspan="7">No AutoRun trades yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <footer class="footer glass-border">
+    <div class="footer-dev">
+      <span>DEV: Brian Ahao</span>
+      <img src="https://cdn.phototourl.com/free/2026-04-05-4e830679-3015-4379-8cd4-90597f4cd56f.png" alt="Dev" class="dev-pic" />
+    </div>
+    <div class="footer-contact">
+      <a href="#" class="contact-link">CONTACTS: <span class="click-here">Click Here</span></a>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script src="autobot.js"></script>
+  <script>
+  'use strict';
+
+  /* ══════════════════════════════════════
+     NEWS PAGE CONTROLLER
+  ══════════════════════════════════════ */
+
+  // ── Clock ──
+  (function() {
+    const timeEl = document.getElementById('clock-time');
+    const dateEl = document.getElementById('clock-date');
+    const sel    = document.getElementById('tz-select');
+    function tick() {
+      const tz  = sel.value;
+      const now = new Date();
+      timeEl.textContent = now.toLocaleTimeString('en-GB', { timeZone: tz, hour12: false });
+      dateEl.textContent = new Intl.DateTimeFormat('en-GB', {
+        timeZone: tz, day: '2-digit', month: '2-digit', year: 'numeric'
+      }).format(now);
+    }
+    tick();
+    setInterval(tick, 1000);
+    sel.addEventListener('change', tick);
+  })();
+
+  // ── Tab switching ──
+  document.querySelectorAll('.news-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.news-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.news-tab-content').forEach(c => c.classList.add('hidden'));
+      tab.classList.add('active');
+      document.getElementById('content-' + tab.dataset.tab).classList.remove('hidden');
+    });
+  });
+
+  // ── Clear buttons ──
+  document.getElementById('clear-all-btn').addEventListener('click', () => {
+    if (window.BotSession) BotSession.newsLog = [];
+    renderNewsPage();
+  });
+  document.getElementById('clear-manual-btn').addEventListener('click', () => {
+    const feed = document.getElementById('news-feed-manual');
+    if (feed) feed.innerHTML = '<div class="news-empty"><span class="news-empty-icon">🖐</span><span class="news-empty-text">Feed cleared.</span></div>';
+  });
+  document.getElementById('clear-autorun-btn').addEventListener('click', () => {
+    const feed = document.getElementById('news-feed-autorun');
+    if (feed) feed.innerHTML = '<div class="news-empty"><span class="news-empty-icon">🤖</span><span class="news-empty-text">Feed cleared.</span></div>';
+  });
+
+  // ── Helpers ──
+  function fmtPL(val) {
+    const v = parseFloat(val) || 0;
+    return (v >= 0 ? '+' : '') + '$' + Math.abs(v).toFixed(2);
+  }
+
+  function plColour(val) {
+    return parseFloat(val) >= 0 ? '#39ff14' : '#ff4444';
+  }
+
+  function makeTradeRow(trade, includeMode) {
+    const tr  = document.createElement('tr');
+    const out = trade.outcome === 'WIN' ? 'WIN' : 'LOSS';
+    const sim = trade.simulated ? ' <span class="sim-tag">SIM</span>' : '';
+    tr.className = `tr-${out.toLowerCase()}`;
+    const dirCol = trade.direction === 'BUY' ? '#39ff14' : '#ff4444';
+
+    let cells = `
+      <td>${trade.time || '—'}</td>
+      ${includeMode ? `<td><span class="mode-badge mode-${trade.mode}">${(trade.mode || '—').toUpperCase()}</span></td>` : ''}
+      <td>${trade.symbol || '—'}</td>
+      <td style="color:${dirCol};font-weight:700;">${trade.direction || '—'}</td>
+      <td>$${(trade.stake || 0).toFixed(2)}</td>
+      <td><span class="outcome-badge outcome-${out.toLowerCase()}">${out}${sim}</span></td>
+      <td style="color:${plColour(trade.profit)};font-weight:700;">${fmtPL(trade.profit)}</td>
+      <td>${trade.confidence || '—'}%</td>
+    `;
+    tr.innerHTML = cells;
+    return tr;
+  }
+
+  function makeNewsEntryEl(entry) {
+    const div = document.createElement('div');
+    div.className = `news-entry news-${entry.type}`;
+    div.innerHTML =
+      `<span class="ne-time">${entry.time}</span>` +
+      `<span class="ne-text">${entry.text}</span>`;
+    return div;
+  }
+
+  // ── Update bot status pill ──
+  function updateBotPill() {
+    if (!window.BotSession) return;
+    const active   = BotSession.manual.active;
+    const autorun  = BotSession.autorun.enabled;
+    const dot      = document.getElementById('nbp-dot');
+    const txt      = document.getElementById('nbp-text');
+    if (!dot || !txt) return;
+    if (autorun) {
+      dot.style.background = '#39ff14';
+      dot.style.boxShadow  = '0 0 8px #39ff14';
+      txt.textContent      = 'AUTORUN ON';
+      txt.style.color      = '#39ff14';
+    } else if (active) {
+      dot.style.background = '#7eb8f7';
+      dot.style.boxShadow  = '0 0 8px #7eb8f7';
+      txt.textContent      = 'BOT ACTIVE';
+      txt.style.color      = '#7eb8f7';
+    } else {
+      dot.style.background = '#ff4444';
+      dot.style.boxShadow  = '0 0 6px #ff4444';
+      txt.textContent      = 'OFFLINE';
+      txt.style.color      = '#ff4444';
+    }
+  }
+
+  // ── MAIN RENDER — called by BotUI.refreshNews() ──
+  window.renderNewsPage = function() {
+    if (!window.BotSession) return;
+
+    const ms = BotSession.manual;
+    const ar = BotSession.autorun;
+
+    // ── All trades combined ──
+    const allTrades = [...ms.trades, ...ar.trades]
+      .sort((a, b) => new Date(b.time) - new Date(a.time));
+    const allWins    = allTrades.filter(t => t.outcome === 'WIN').length;
+    const allLosses  = allTrades.filter(t => t.outcome === 'LOSS').length;
+    const allTotal   = allTrades.length;
+    const allWR      = allTotal > 0 ? Math.round(allWins / allTotal * 100) : 0;
+    const allPL      = allTrades.reduce((s, t) => s + (parseFloat(t.profit) || 0), 0);
+    const balance    = window.DerivAuth?.getAccount()?.balance;
+
+    setText('all-trades',  allTotal);
+    setText('all-wins',    allWins);
+    setText('all-losses',  allLosses);
+    setText('all-wr',      allTotal > 0 ? allWR + '%' : '—%');
+    setPlText('all-pl',    allPL);
+    setText('all-balance', balance ? '$' + parseFloat(balance).toFixed(2) : '—');
+
+    // ── Manual stats ──
+    const mTotal = ms.runsDone;
+    const mWR    = mTotal > 0 ? Math.round(ms.wins / mTotal * 100) : 0;
+    setText('m-trades',  mTotal);
+    setText('m-wins',    ms.wins);
+    setText('m-losses',  ms.losses);
+    setText('m-wr',      mTotal > 0 ? mWR + '%' : '—%');
+    setPlText('m-pl',    ms.netPL);
+    setText('m-runs',    `${ms.runsDone} / ${ms.runsTotal === Infinity ? '∞' : ms.runsTotal}`);
+
+    // ── AutoRun stats ──
+    const arTotal = ar.runsDone;
+    const arWR    = arTotal > 0 ? Math.round(ar.wins / arTotal * 100) : 0;
+    const arStatusEl = document.getElementById('ar-status');
+    if (arStatusEl) {
+      arStatusEl.textContent = ar.enabled ? 'RUNNING' : 'DISABLED';
+      arStatusEl.style.color = ar.enabled ? '#39ff14' : '#ff4444';
+    }
+    setText('ar-trades',   arTotal);
+    setText('ar-wins',     ar.wins);
+    setText('ar-losses',   ar.losses);
+    setText('ar-wr',       arTotal > 0 ? arWR + '%' : '—%');
+    setPlText('ar-pl',     ar.netPL);
+
+    // ── AutoRun pulse dot ──
+    const arPulse = document.getElementById('ar-pulse');
+    if (arPulse) {
+      arPulse.style.background  = ar.enabled ? '#39ff14' : '#8ab4d8';
+      arPulse.style.boxShadow   = ar.enabled ? '0 0 8px #39ff14' : 'none';
+    }
+
+    // ── Rebuild ALL news feed ──
+    const feedAll = document.getElementById('news-feed-all');
+    if (feedAll) {
+      const frag = document.createDocumentFragment();
+      if (BotSession.newsLog.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'news-empty';
+        empty.innerHTML =
+          '<span class="news-empty-icon">📡</span>' +
+          '<span class="news-empty-text">No bot activity yet.<br/>Start a session from the Dashboard.</span>';
+        frag.appendChild(empty);
+      } else {
+        BotSession.newsLog.forEach(e => frag.appendChild(makeNewsEntryEl(e)));
+      }
+      feedAll.replaceChildren(frag);
+    }
+
+    // ── Rebuild ALL trades table ──
+    const tbodyAll = document.getElementById('tbody-all');
+    if (tbodyAll) {
+      const frag = document.createDocumentFragment();
+      if (allTrades.length === 0) {
+        const tr = document.createElement('tr');
+        tr.className = 'table-empty-row';
+        tr.innerHTML = '<td colspan="8">No trades recorded yet.</td>';
+        frag.appendChild(tr);
+      } else {
+        allTrades.forEach(t => frag.appendChild(makeTradeRow(t, true)));
+      }
+      tbodyAll.replaceChildren(frag);
+    }
+
+    // ── Rebuild Manual trades table ──
+    const tbodyM = document.getElementById('tbody-manual');
+    if (tbodyM) {
+      const frag = document.createDocumentFragment();
+      if (ms.trades.length === 0) {
+        const tr = document.createElement('tr');
+        tr.className = 'table-empty-row';
+        tr.innerHTML = '<td colspan="7">No manual trades yet.</td>';
+        frag.appendChild(tr);
+      } else {
+        ms.trades.forEach(t => frag.appendChild(makeTradeRow(t, false)));
+      }
+      tbodyM.replaceChildren(frag);
+    }
+
+    // ── Rebuild AutoRun trades table ──
+    const tbodyAR = document.getElementById('tbody-autorun');
+    if (tbodyAR) {
+      const frag = document.createDocumentFragment();
+      if (ar.trades.length === 0) {
+        const tr = document.createElement('tr');
+        tr.className = 'table-empty-row';
+        tr.innerHTML = '<td colspan="7">No AutoRun trades yet.</td>';
+        frag.appendChild(tr);
+      } else {
+        ar.trades.forEach(t => frag.appendChild(makeTradeRow(t, false)));
+      }
+      tbodyAR.replaceChildren(frag);
+    }
+
+    updateBotPill();
+  };
+
+  // ── Text helpers ──
+  function setText(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+
+  function setPlText(id, val) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent  = fmtPL(val);
+    el.style.color  = plColour(val);
+  }
+
+  // ── Poll every 3s for live updates ──
+  setInterval(() => {
+    if (window.BotSession) renderNewsPage();
+  }, 3000);
+
+  // ── Initial render after scripts load ──
+  setTimeout(() => {
+    if (window.BotSession) renderNewsPage();
+  }, 1000);
+  </script>
+
+</body>
+</html>
