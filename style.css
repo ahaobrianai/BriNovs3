@@ -1,0 +1,61 @@
+/* =========================================
+   SPA NAVIGATION SYSTEM (ADD TO BOTTOM)
+   ========================================= */
+
+/* Hide all sections by default */
+.spa-section {
+    display: none;
+    width: 100%;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Only show the section with the .active-section class */
+.active-section {
+    display: block !important;
+}
+
+/* Ensure the layout for Part A and Part B works inside sections */
+.content-layout {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Tab Pointer styling */
+.nav-link {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--luminous-green);
+    text-shadow: 0 0 10px var(--luminous-green);
+}
+
+/* Smooth fade-in animation for switching tabs */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Specific styling for the Watcher Terminal inside SPA */
+.terminal-card {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+}
+
+#watcher-feed {
+    scrollbar-width: thin;
+    scrollbar-color: var(--luminous-green) #000;
+}
+
+/* Custom layout for News/Report section to keep it clean */
+#bot-news-feed {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    max-height: 70vh;
+    overflow-y: auto;
+}
