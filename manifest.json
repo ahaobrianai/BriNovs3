@@ -1,0 +1,54 @@
+{
+  "name": "BriNovs FX Engine",
+  "short_name": "BriNovs FX",
+  "description": "Professional forex and synthetic market signal platform powered by the Invisible Watcher — candlestick pattern recognition, live S&R analysis, and adaptive signal intelligence.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#060e1c",
+  "background_color": "#060e1c",
+  "lang": "en",
+  "categories": ["finance", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "https://cdn.phototourl.com/free/2026-04-03-cfdc5ddf-4cfa-4d61-b9bd-ea00ff47f1f6.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn.phototourl.com/free/2026-04-03-cfdc5ddf-4cfa-4d61-b9bd-ea00ff47f1f6.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Signal Centre",
+      "short_name": "Signals",
+      "description": "Open the live signal centre",
+      "url": "/signals.html",
+      "icons": [
+        {
+          "src": "https://cdn.phototourl.com/free/2026-04-03-cfdc5ddf-4cfa-4d61-b9bd-ea00ff47f1f6.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Invisible Watcher",
+      "short_name": "Watcher",
+      "description": "Open the Invisible Watcher analysis page",
+      "url": "/watcher.html",
+      "icons": [
+        {
+          "src": "https://cdn.phototourl.com/free/2026-04-03-cfdc5ddf-4cfa-4d61-b9bd-ea00ff47f1f6.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}
