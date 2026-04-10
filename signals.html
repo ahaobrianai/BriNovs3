@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signals — BriNovs FX Engine</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="signals.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ═══════════════════ HEADER ═══════════════════ -->
+  <header class="header glass-border">
+    <div class="header-brand">
+      <img src="https://cdn.phototourl.com/free/2026-04-03-cfdc5ddf-4cfa-4d61-b9bd-ea00ff47f1f6.png" alt="BriNovs Logo" class="brand-logo" />
+      <div class="brand-name-box glass-mini">
+        <div class="brand-text">
+          <span class="brand-line1">BriNovs <span class="fx-green">FX</span></span>
+          <span class="brand-line2">Engine</span>
+        </div>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <a href="index.html"   class="nav-tab">Dashboard</a>
+      <a href="#"            class="nav-tab">Strategies</a>
+      <a href="watcher.html" class="nav-tab">Signal</a>
+    </nav>
+    <div class="header-right">
+      <div class="user-profile glass-mini">
+        <svg class="user-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="15" r="8" fill="#8aa8c8"/>
+          <ellipse cx="20" cy="36" rx="14" ry="9" fill="#8aa8c8"/>
+        </svg>
+        <span class="user-label">User</span>
+        <button class="menu-lines" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="clock-block">
+        <div class="clock-timezone-row">
+          <div class="clock-display">
+            <span id="clock-time" class="digital-time">00:00:00</span>
+          </div>
+          <select id="tz-select" class="tz-toggle glass-mini">
+            <option value="Africa/Nairobi">EAT</option>
+            <option value="Europe/London">GMT</option>
+            <option value="UTC">UTC</option>
+            <option value="Africa/Harare">CAT</option>
+          </select>
+        </div>
+        <div class="clock-date">
+          <span id="clock-date" class="digital-date">00/00/0000</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════ SIGNALS BODY ═══════════════════ -->
+  <main class="signals-main">
+
+    <!-- ── TITLE + STATS BAR ── -->
+    <div class="signals-title-bar glass-box">
+      <div class="stb-left">
+        <span class="pulse-dot"></span>
+        <div>
+          <h1 class="signals-page-title">SIGNAL CENTRE</h1>
+          <p class="signals-page-sub">Invisible Watcher — Live Analysis &amp; Signal Archive</p>
+        </div>
+      </div>
+      <div class="stb-right">
+        <div class="stb-stat">
+          <span class="stb-stat-val" id="stb-total">0</span>
+          <span class="stb-stat-label">TOTAL</span>
+        </div>
+        <div class="stb-stat">
+          <span class="stb-stat-val sig-green" id="stb-wins">0</span>
+          <span class="stb-stat-label">WINS</span>
+        </div>
+        <div class="stb-stat">
+          <span class="stb-stat-val sig-red" id="stb-losses">0</span>
+          <span class="stb-stat-label">LOSSES</span>
+        </div>
+        <div class="stb-stat">
+          <span class="stb-stat-val sig-yellow" id="stb-wr">—%</span>
+          <span class="stb-stat-label">WIN RATE</span>
+        </div>
+        <!-- Accuracy: wins out of wins+losses only (not expired) -->
+        <div class="stb-stat">
+          <span class="stb-stat-val sig-green" id="stb-accuracy">—</span>
+          <span class="stb-stat-label">ACCURACY</span>
+        </div>
+        <button class="fx-btn sig-clear-btn" id="clear-btn">🗑 Clear History</button>
+      </div>
+    </div>
+
+    <!-- ── MARKET SELECTOR ── -->
+    <div class="mkt-selector glass-box">
+
+      <div class="mkt-group">
+        <span class="mkt-group-label">📈 FOREX — REAL MARKETS (24/5)</span>
+        <div class="mkt-btns">
+          <button class="mkt-btn active" data-sym="frxEURUSD" data-label="EUR/USD" data-gran="60">EUR/USD</button>
+          <button class="mkt-btn" data-sym="frxGBPUSD" data-label="GBP/USD" data-gran="60">GBP/USD</button>
+          <button class="mkt-btn" data-sym="frxUSDJPY" data-label="USD/JPY" data-gran="60">USD/JPY</button>
+          <button class="mkt-btn" data-sym="frxAUDUSD" data-label="AUD/USD" data-gran="60">AUD/USD</button>
+          <button class="mkt-btn" data-sym="frxUSDCAD" data-label="USD/CAD" data-gran="60">USD/CAD</button>
+          <button class="mkt-btn" data-sym="frxUSDCHF" data-label="USD/CHF" data-gran="60">USD/CHF</button>
+          <button class="mkt-btn" data-sym="frxNZDUSD" data-label="NZD/USD" data-gran="60">NZD/USD</button>
+          <button class="mkt-btn" data-sym="frxGBPJPY" data-label="GBP/JPY" data-gran="60">GBP/JPY</button>
+        </div>
+      </div>
+
+      <div class="mkt-divider"></div>
+
+      <div class="mkt-group">
+        <span class="mkt-group-label">🤖 SYNTHETIC INDICES — DERIV (24/7)</span>
+        <div class="mkt-btns">
+          <button class="mkt-btn mkt-syn" data-sym="R_100"     data-label="Volatility 100"    data-gran="60">Vol 100</button>
+          <button class="mkt-btn mkt-syn" data-sym="R_75"      data-label="Volatility 75"     data-gran="60">Vol 75</button>
+          <button class="mkt-btn mkt-syn" data-sym="R_50"      data-label="Volatility 50"     data-gran="60">Vol 50</button>
+          <button class="mkt-btn mkt-syn" data-sym="R_25"      data-label="Volatility 25"     data-gran="60">Vol 25</button>
+          <button class="mkt-btn mkt-syn" data-sym="R_10"      data-label="Volatility 10"     data-gran="60">Vol 10</button>
+          <button class="mkt-btn mkt-syn" data-sym="1HZ100V"   data-label="Volatility 100(1s)" data-gran="1">Vol 100(1s)</button>
+          <button class="mkt-btn mkt-syn" data-sym="1HZ75V"    data-label="Volatility 75(1s)"  data-gran="1">Vol 75(1s)</button>
+          <button class="mkt-btn mkt-syn" data-sym="1HZ50V"    data-label="Volatility 50(1s)"  data-gran="1">Vol 50(1s)</button>
+          <button class="mkt-btn mkt-syn" data-sym="BOOM1000"  data-label="Boom 1000"         data-gran="60">Boom 1000</button>
+          <button class="mkt-btn mkt-syn" data-sym="BOOM500"   data-label="Boom 500"          data-gran="60">Boom 500</button>
+          <button class="mkt-btn mkt-syn" data-sym="CRASH1000" data-label="Crash 1000"        data-gran="60">Crash 1000</button>
+          <button class="mkt-btn mkt-syn" data-sym="CRASH500"  data-label="Crash 500"         data-gran="60">Crash 500</button>
+          <button class="mkt-btn mkt-syn" data-sym="stpRNG"    data-label="Step Index"        data-gran="60">Step Index</button>
+          <button class="mkt-btn mkt-syn" data-sym="JD100"     data-label="Jump 100"          data-gran="60">Jump 100</button>
+          <button class="mkt-btn mkt-syn" data-sym="JD75"      data-label="Jump 75"           data-gran="60">Jump 75</button>
+          <button class="mkt-btn mkt-syn" data-sym="JD50"      data-label="Jump 50"           data-gran="60">Jump 50</button>
+        </div>
+      </div>
+
+      <div class="mkt-divider"></div>
+
+      <div class="mkt-bottom-row">
+        <div class="mkt-group mkt-tf-group">
+          <span class="mkt-group-label">⏱ TIMEFRAME</span>
+          <div class="mkt-btns">
+            <button class="mkt-tf" data-gran="1">T1</button>
+            <button class="mkt-tf active" data-gran="60">M1</button>
+            <button class="mkt-tf" data-gran="120">M2</button>
+            <button class="mkt-tf" data-gran="300">M5</button>
+            <button class="mkt-tf" data-gran="600">M10</button>
+            <button class="mkt-tf" data-gran="900">M15</button>
+            <button class="mkt-tf" data-gran="1800">M30</button>
+            <button class="mkt-tf" data-gran="3600">H1</button>
+            <button class="mkt-tf" data-gran="14400">H4</button>
+          </div>
+        </div>
+        <div class="mkt-active-display glass-mini">
+          <span class="mkt-active-sym" id="mkt-active-sym">EUR/USD</span>
+          <span class="mkt-active-tf"  id="mkt-active-tf">M1</span>
+          <span class="mkt-status-dot" id="mkt-status-dot"></span>
+          <span class="mkt-status-txt" id="mkt-status-txt">Connecting…</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── ACTIVE SIGNAL ── -->
+    <div class="sig-section-label">
+      <span class="sig-dot sig-dot-active"></span>
+      ACTIVE SIGNAL
+    </div>
+    <!-- Active card is updated by JS — never rebuilt for timer ticks alone -->
+    <div id="active-signal-wrap">
+      <div class="sig-waiting glass-box">
+        <span class="sig-wait-icon">📡</span>
+        <span class="sig-wait-text">
+          Connecting to market…<br/>
+          The Invisible Watcher requires ≥3 confluent factors and score ≥5 before issuing a signal.
+        </span>
+      </div>
+    </div>
+
+    <!-- ── FILTER + SORT BAR ── -->
+    <div class="sig-filter-bar glass-box">
+      <span class="sig-filter-label">FILTER</span>
+      <div class="sig-filter-btns">
+        <button class="sig-filter-btn active" data-f="all">All</button>
+        <button class="sig-filter-btn" data-f="BUY">BUY Only</button>
+        <button class="sig-filter-btn" data-f="SELL">SELL Only</button>
+        <button class="sig-filter-btn" data-f="WIN">Wins</button>
+        <button class="sig-filter-btn" data-f="LOSS">Losses</button>
+        <button class="sig-filter-btn" data-f="EXPIRED">Expired</button>
+        <button class="sig-filter-btn" data-f="HIGH">High Conf.</button>
+      </div>
+      <span class="sig-filter-spacer"></span>
+      <span class="sig-filter-label">SORT</span>
+      <select id="sort-select" class="tz-toggle glass-mini">
+        <option value="newest">Newest First</option>
+        <option value="oldest">Oldest First</option>
+        <option value="confidence">Highest Confidence</option>
+        <option value="score">Highest Score</option>
+      </select>
+    </div>
+
+    <!-- ── SIGNAL HISTORY GRID ── -->
+    <div class="sig-section-label">
+      <span class="sig-dot sig-dot-history"></span>
+      SIGNAL HISTORY
+    </div>
+    <div id="signals-grid" class="signals-grid">
+      <div class="sig-empty">
+        <div class="sig-empty-icon">🔍</div>
+        <div class="sig-empty-text">
+          No signals stored yet.<br/>
+          Signals are saved automatically once the Watcher detects strong confluence.<br/>
+          <small>Min confluence: 3 independent factors + score ≥ 5</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADAPTIVE LEARNING STATS ── -->
+    <div class="sig-section-label" style="margin-top:8px;">
+      <span class="sig-dot sig-dot-learn"></span>
+      ADAPTIVE LEARNING — PATTERN PERFORMANCE
+    </div>
+    <div id="learning-wrap" class="learning-wrap glass-box">
+      <div class="learning-intro">
+        The brain tracks every signal outcome (WIN / LOSS). Pattern weights adjust automatically —
+        patterns with better historical accuracy earn higher confluence scores.
+        Accuracy = wins ÷ (wins + losses), ignoring expired signals.
+      </div>
+      <div id="learning-grid" class="learning-grid">
+        <div class="learning-empty">No learning data yet. Accumulates after first resolved signals.</div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ═══════════════════ SIGNAL DETAIL MODAL ═══════════════════ -->
+  <div id="sig-modal" class="sig-modal sig-modal-hidden">
+    <div class="sig-modal-backdrop" id="modal-backdrop"></div>
+    <div class="sig-modal-box glass-box">
+      <button class="sig-modal-close" id="modal-close" aria-label="Close">✕</button>
+      <div id="modal-inner" class="modal-inner"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <footer class="footer glass-border">
+    <div class="footer-dev">
+      <span>DEV: Brian Ahao</span>
+      <img src="https://cdn.phototourl.com/free/2026-04-05-4e830679-3015-4379-8cd4-90597f4cd56f.png" alt="Dev" class="dev-pic" />
+    </div>
+    <div class="footer-contact">
+      <a href="#" class="contact-link">CONTACTS: <span class="click-here">Click Here</span></a>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+  'use strict';
+
+  /* ══════════════════════════════════════════════════════
+     SIGNALS PAGE CONTROLLER  v3.0
+     Performance fixes:
+     • renderAll() rebuilds history grid only on demand
+       (filter/sort change, or app.js throttled refresh)
+     • Active card inner HTML rebuilt only when signal ID
+       changes — timer only touches the timer text node
+     • History cards rendered once, stored in a Map,
+       never redrawn on subsequent renderAll() calls
+     • Mini charts drawn once per card, never again
+     • setInterval polls at 10s, not 4s
+     • Clock runs independently — no coupling to renderAll
+  ══════════════════════════════════════════════════════ */
+
+  // ── Clock — runs independently, touches only 2 text nodes ──
+  (function() {
+    const timeEl = document.getElementById('clock-time');
+    const dateEl = document.getElementById('clock-date');
+    const sel    = document.getElementById('tz-select');
+
+    function tick() {
+      const tz  = sel.value;
+      const now = new Date();
+      timeEl.textContent = now.toLocaleTimeString('en-GB', { timeZone: tz, hour12: false });
+      dateEl.textContent = new Intl.DateTimeFormat('en-GB', {
+        timeZone: tz, day: '2-digit', month: '2-digit', year: 'numeric'
+      }).format(now);
+    }
+    tick();
+    setInterval(tick, 1000);
+    sel.addEventListener('change', tick);
+  })();
+
+  // ── Page state ──
+  let _filter = 'all';
+  let _sort   = 'newest';
+  let _currentGran = 60;
+
+  // Card cache — keyed by signal.id so cards are never rebuilt
+  const _cardCache = new Map();
+
+  // Track which signal is currently shown in the active card
+  let _activeCardSignalId = null;
+
+  // ── Filter buttons ──
+  document.querySelectorAll('.sig-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sig-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      _filter = btn.dataset.f;
+      renderGrid();
+    });
+  });
+
+  document.getElementById('sort-select').addEventListener('change', e => {
+    _sort = e.target.value;
+    renderGrid();
+  });
+
+  // ── Clear history ──
+  document.getElementById('clear-btn').addEventListener('click', () => {
+    if (!window.SignalStore) return;
+    if (confirm('Delete all stored signals and learning history? This cannot be undone.')) {
+      SignalStore.clear();
+      LearningEngine.reset();
+      _cardCache.clear();
+      _activeCardSignalId = null;
+      renderAll();
+    }
+  });
+
+  // ── Modal ──
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal-backdrop').addEventListener('click', closeModal);
+
+  function closeModal() {
+    document.getElementById('sig-modal').classList.add('sig-modal-hidden');
+  }
+
+  function openModal(signal) {
+    if (!signal) return;
+    const inner = document.getElementById('modal-inner');
+    inner.innerHTML = '';
+
+    const dc      = signal.direction === 'BUY' ? '#39ff14' : '#ff4444';
+    const outcome = signal.outcome || 'ACTIVE';
+    const isExp   = signal.expiresAt && Date.now() > signal.expiresAt && outcome === 'ACTIVE';
+    const status  = outcome !== 'ACTIVE' ? outcome : isExp ? 'EXPIRED' : 'ACTIVE';
+    const b       = signal.budget;
+
+    // Header
+    const hdr = mk('div', 'modal-header');
+    hdr.innerHTML = `
+      <div class="modal-dir" style="color:${dc}">
+        ${signal.direction === 'BUY' ? '↗' : '↙'} ${signal.direction}
+      </div>
+      <div class="modal-submeta">
+        ${signal.symbolLabel || '—'} &nbsp;·&nbsp; ${signal.timeframe || '—'} &nbsp;·&nbsp;
+        ${signal.session || '—'} session &nbsp;·&nbsp;
+        Score: <strong>${signal.score}</strong> &nbsp;·&nbsp;
+        Factors: <strong>${signal.factors}</strong>
+      </div>
+      <div class="modal-issued">
+        Issued: ${fmtTime(signal.time)} &nbsp;|&nbsp;
+        Expires: ${signal.expiresAt ? fmtTime(signal.expiresAt) : '—'}
+      </div>
+      <span class="sig-badge sig-badge-${status.toLowerCase()}">${status}</span>
+    `;
+    inner.appendChild(hdr);
+
+    // Chart section — one canvas, drawn once
+    const chartSec = mk('div', 'modal-chart-section');
+    const chartTitle = mk('div', 'modal-section-title');
+    chartTitle.textContent = '📈 ANNOTATED CHART';
+    chartSec.appendChild(chartTitle);
+
+    const chartCanvas = document.createElement('canvas');
+    chartCanvas.className = 'modal-chart-canvas';
+    chartCanvas.width  = 720;
+    chartCanvas.height = 400;
+    chartSec.appendChild(chartCanvas);
+
+    // Draw once after DOM insertion — no repeated redraws
+    requestAnimationFrame(() => {
+      if (window.ChartRenderer) {
+        ChartRenderer.drawSignalChart(chartCanvas, signal);
+      }
+    });
+
+    const dlBtn = mk('button', 'fx-btn modal-dl-btn');
+    dlBtn.textContent = '⬇ Download Chart Image';
+    dlBtn.onclick = () => {
+      const a    = document.createElement('a');
+      a.download = `BriNovs_${signal.direction}_${(signal.symbolLabel || '').replace('/', '')}_${signal.id || Date.now()}.png`;
+      a.href     = chartCanvas.toDataURL('image/png');
+      a.click();
+    };
+    chartSec.appendChild(dlBtn);
+    inner.appendChild(chartSec);
+
+    // Budget
+    if (b) {
+      const bdiv = mk('div', 'modal-budget-section');
+      bdiv.innerHTML = `
+        <div class="modal-section-title">💰 PROPOSED BUDGET</div>
+        <div class="modal-budget-grid">
+          <div class="mbudget-item">
+            <span class="mbi-label">SUGGESTED STAKE</span>
+            <span class="mbi-val mbi-stake">$${b.suggestedStake}</span>
+          </div>
+          <div class="mbudget-item">
+            <span class="mbi-label">TAKE PROFIT</span>
+            <span class="mbi-val mbi-tp">${b.tpPrice} <small>+${b.tpPips} pips</small></span>
+          </div>
+          <div class="mbudget-item">
+            <span class="mbi-label">STOP LOSS</span>
+            <span class="mbi-val mbi-sl">${b.slPrice} <small>-${b.slPips} pips</small></span>
+          </div>
+          <div class="mbudget-item">
+            <span class="mbi-label">RISK : REWARD</span>
+            <span class="mbi-val mbi-rr">${b.rr} : 1</span>
+          </div>
+        </div>
+        <div class="mbudget-note">${b.riskNote || ''}</div>
+      `;
+      inner.appendChild(bdiv);
+    }
+
+    // Indicators
+    const indSec = mk('div', 'modal-indicators-section');
+    indSec.innerHTML = `
+      <div class="modal-section-title">📊 INDICATOR READINGS</div>
+      <div class="modal-indicator-row">
+        <div class="mind-item"><span class="mind-label">TREND</span>
+          <span class="mind-val" style="color:${signal.trend==='UPTREND'?'#39ff14':signal.trend==='DOWNTREND'?'#ff4444':'#ffcc00'}">
+            ${signal.trend} (${signal.trendStrength}%)
+          </span>
+        </div>
+        <div class="mind-item"><span class="mind-label">SESSION</span><span class="mind-val">${signal.session}</span></div>
+        <div class="mind-item"><span class="mind-label">RSI (14)</span>
+          <span class="mind-val" style="color:${parseFloat(signal.rsi)<30?'#39ff14':parseFloat(signal.rsi)>70?'#ff4444':'#7eb8f7'}">
+            ${signal.rsi}
+          </span>
+        </div>
+        <div class="mind-item"><span class="mind-label">STOCH</span>
+          <span class="mind-val" style="color:${parseFloat(signal.stoch)<20?'#39ff14':parseFloat(signal.stoch)>80?'#ff4444':'#7eb8f7'}">
+            ${signal.stoch}
+          </span>
+        </div>
+        <div class="mind-item"><span class="mind-label">MACD Hist</span>
+          <span class="mind-val" style="color:${parseFloat(signal.macd?.hist||0)>0?'#39ff14':'#ff4444'}">
+            ${signal.macd?.hist || '—'}
+          </span>
+        </div>
+        <div class="mind-item"><span class="mind-label">ATR</span><span class="mind-val">${signal.atr}</span></div>
+        <div class="mind-item"><span class="mind-label">TIMEFRAME</span><span class="mind-val">${signal.timeframe}</span></div>
+        <div class="mind-item"><span class="mind-label">SYMBOL</span><span class="mind-val">${signal.symbolLabel}</span></div>
+      </div>
+    `;
+    inner.appendChild(indSec);
+
+    // Analysis tabs
+    const analysisSec = mk('div', 'modal-analysis-section');
+    analysisSec.innerHTML = `
+      <div class="modal-section-title">🔍 FULL ANALYSIS</div>
+      <div class="modal-tabs">
+        <button class="modal-tab active" data-target="mtab-pro">Professional View</button>
+        <button class="modal-tab" data-target="mtab-beg">Beginner View</button>
+      </div>
+      <div id="mtab-pro" class="modal-tab-body">
+        ${(signal.proNarration || 'Analysis not available.').replace(/\n/g, '<br/>')}
+      </div>
+      <div id="mtab-beg" class="modal-tab-body modal-tab-hidden">
+        ${(signal.beginnerNarration || 'Beginner explanation not available.').replace(/\n/g, '<br/>')}
+      </div>
+    `;
+    analysisSec.querySelectorAll('.modal-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        analysisSec.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        analysisSec.querySelectorAll('.modal-tab-body').forEach(b => b.classList.add('modal-tab-hidden'));
+        const target = analysisSec.querySelector('#' + tab.dataset.target);
+        if (target) target.classList.remove('modal-tab-hidden');
+      });
+    });
+    inner.appendChild(analysisSec);
+
+    // Patterns
+    if (signal.patterns && signal.patterns.length > 0) {
+      const patSec = mk('div', 'modal-patterns-section');
+      patSec.innerHTML = `<div class="modal-section-title">🕯 CANDLESTICK PATTERNS DETECTED</div>`;
+      const patGrid = mk('div', 'modal-patterns-grid');
+      signal.patterns.forEach(p => {
+        const card = mk('div', `modal-pattern-card mpat-${p.bias}`);
+        card.innerHTML = `
+          <div class="mpat-name">${p.name}</div>
+          <div class="mpat-bias-badge mpat-bias-${p.bias}">${p.bias.toUpperCase()}</div>
+          <div class="mpat-desc">${p.desc}</div>
+          <div class="mpat-strength">${'●'.repeat(p.strength)}${'○'.repeat(Math.max(0, 6 - p.strength))} &nbsp;${p.strength}/6</div>
+        `;
+        patGrid.appendChild(card);
+      });
+      patSec.appendChild(patGrid);
+      inner.appendChild(patSec);
+    }
+
+    // Confluence reasons
+    if (signal.reasons && signal.reasons.length > 0) {
+      const confSec = mk('div', 'modal-confluence-section');
+      confSec.innerHTML = `<div class="modal-section-title">⚡ CONFLUENCE FACTORS (${signal.factors} active)</div>`;
+      const list = mk('ul', 'modal-reasons-list');
+      signal.reasons.forEach(r => {
+        const li = document.createElement('li');
+        li.className = `modal-reason modal-reason-${r.side}`;
+        li.textContent = r.text;
+        list.appendChild(li);
+      });
+      confSec.appendChild(list);
+      if (signal.warnings && signal.warnings.length > 0) {
+        const warnDiv = mk('div', 'modal-warnings');
+        warnDiv.innerHTML = `<span class="modal-warn-title">⚠ Cautions:</span> ${signal.warnings.join(' &nbsp;|&nbsp; ')}`;
+        confSec.appendChild(warnDiv);
+      }
+      inner.appendChild(confSec);
+    }
+
+    document.getElementById('sig-modal').classList.remove('sig-modal-hidden');
+  }
+
+  // ══════════════════════════════════════════════
+  // ACTIVE CARD — smart update
+  // Only replaces innerHTML when signal changes.
+  // Timer ticks update only the timer text node.
+  // ══════════════════════════════════════════════
+  let _timerInterval = null;
+
+  function renderActiveCard(signal) {
+    const wrap = document.getElementById('active-signal-wrap');
+
+    if (!signal || signal.direction === 'WAIT') {
+      // Only update if we weren't already showing "waiting"
+      if (_activeCardSignalId !== null) {
+        _activeCardSignalId = null;
+        if (_timerInterval) { clearInterval(_timerInterval); _timerInterval = null; }
+        wrap.innerHTML = `
+          <div class="sig-waiting glass-box">
+            <span class="sig-wait-icon">📡</span>
+            <span class="sig-wait-text">
+              Analysing market…<br/>
+              Watcher requires ≥3 confluent factors and score ≥5 before issuing a signal.<br/>
+              Current score: <strong>${window.BriNovs?.currentSignal?.score ?? '—'}</strong>
+            </span>
+          </div>`;
+      }
+      return;
+    }
+
+    // If same signal is already displayed, only update the timer text node
+    if (_activeCardSignalId === signal.id) {
+      const timerEl = document.getElementById('ac-timer-text');
+      if (timerEl && signal.expiresAt) {
+        const remaining = Math.max(0, Math.round((signal.expiresAt - Date.now()) / 60000));
+        timerEl.textContent = `⏱ ~${remaining} min left (${signal.validForCandles} candles)`;
+      }
+      return;
+    }
+
+    // New signal — rebuild the card once
+    _activeCardSignalId = signal.id;
+    if (_timerInterval) { clearInterval(_timerInterval); _timerInterval = null; }
+
+    const dc      = signal.direction === 'BUY' ? '#39ff14' : '#ff4444';
+    const confCol = signal.confidence >= 67 ? '#39ff14' : signal.confidence >= 34 ? '#ffcc00' : '#ff4444';
+    const b       = signal.budget;
+
+    function minsLeft() {
+      return signal.expiresAt ? Math.max(0, Math.round((signal.expiresAt - Date.now()) / 60000)) : '—';
+    }
+
+    wrap.innerHTML = `
+      <div class="active-card glass-box" style="border-color:${dc}; box-shadow:0 0 28px ${dc}28, inset 0 0 40px ${dc}06;">
+        <div class="ac-col ac-left">
+          <div class="ac-direction" style="color:${dc}">
+            ${signal.direction === 'BUY' ? '↗' : '↙'} ${signal.direction}
+          </div>
+          <div class="ac-prob">${signal.probability} PROBABILITY</div>
+          <div class="ac-info">${signal.symbolLabel} &nbsp;·&nbsp; ${signal.timeframe} &nbsp;·&nbsp; ${signal.session}</div>
+          <div class="ac-info">Score: ${signal.score} &nbsp;·&nbsp; Factors: ${signal.factors}</div>
+          <div class="ac-timer" id="ac-timer-text">⏱ ~${minsLeft()} min left (${signal.validForCandles} candles)</div>
+          <div class="ac-patterns">
+            ${(signal.patterns || []).map(p => `<span class="wls-badge ${p.bias}">${p.name}</span>`).join('')}
+          </div>
+          <button class="fx-btn ac-detail-btn" id="ac-open-modal">Full Detail + Chart →</button>
+        </div>
+        <div class="ac-col ac-mid">
+          <canvas id="ac-minichart" class="ac-minichart" width="340" height="150"></canvas>
+        </div>
+        <div class="ac-col ac-right">
+          <div class="ac-conf-label">CONFIDENCE</div>
+          <div class="ac-conf-val" style="color:${confCol}">${signal.confidence}%</div>
+          ${b ? `
+          <div class="ac-budget-box">
+            <div class="ac-budget-row"><span class="ac-bl">Stake</span><span class="ac-bv">$${b.suggestedStake}</span></div>
+            <div class="ac-budget-row"><span class="ac-bl">TP</span><span class="ac-bv" style="color:#39ff14">${b.tpPrice}</span></div>
+            <div class="ac-budget-row"><span class="ac-bl">SL</span><span class="ac-bv" style="color:#ff4444">${b.slPrice}</span></div>
+            <div class="ac-budget-row"><span class="ac-bl">R:R</span><span class="ac-bv">${b.rr}:1</span></div>
+          </div>
+          <div class="ac-risk-note">${b.riskNote || ''}</div>
+          ` : ''}
+        </div>
+      </div>
+    `;
+
+    // Wire detail button
+    document.getElementById('ac-open-modal').addEventListener('click', () => openModal(signal));
+
+    // Draw mini chart once via RAF — not repeated
+    requestAnimationFrame(() => {
+      const mc = document.getElementById('ac-minichart');
+      if (mc && window.ChartRenderer) ChartRenderer.drawSignalChart(mc, signal);
+    });
+
+    // Start timer interval — only touches one text node
+    _timerInterval = setInterval(() => {
+      const timerEl = document.getElementById('ac-timer-text');
+      if (!timerEl) { clearInterval(_timerInterval); _timerInterval = null; return; }
+      timerEl.textContent = `⏱ ~${minsLeft()} min left (${signal.validForCandles} candles)`;
+    }, 30000); // update every 30 seconds — smooth enough, no jitter
+  }
+
+  // ══════════════════════════════════════════════
+  // HISTORY CARD — built once, cached by signal.id
+  // ══════════════════════════════════════════════
+  function getOrMakeHistoryCard(signal) {
+    if (_cardCache.has(signal.id)) {
+      // Card already exists — update badge if outcome changed
+      const cached = _cardCache.get(signal.id);
+      const outcome   = signal.outcome || 'ACTIVE';
+      const isExp     = signal.expiresAt && Date.now() > signal.expiresAt && outcome === 'ACTIVE';
+      const status    = outcome !== 'ACTIVE' ? outcome : isExp ? 'EXPIRED' : 'ACTIVE';
+      const badgeEl   = cached.querySelector('.sig-badge');
+      if (badgeEl) {
+        badgeEl.textContent  = status;
+        badgeEl.className    = `sig-badge sig-badge-${status.toLowerCase()}`;
+      }
+      return cached;
+    }
+
+    // Build card fresh
+    const dc      = signal.direction === 'BUY' ? '#39ff14' : '#ff4444';
+    const outcome = signal.outcome || 'ACTIVE';
+    const isExp   = signal.expiresAt && Date.now() > signal.expiresAt && outcome === 'ACTIVE';
+    const status  = outcome !== 'ACTIVE' ? outcome : isExp ? 'EXPIRED' : 'ACTIVE';
+    const b       = signal.budget;
+
+    const card = mk('div', 'sig-card glass-box');
+    card.style.borderTop = `3px solid ${dc}`;
+    card.innerHTML = `
+      <div class="sc-head">
+        <div class="sc-dir" style="color:${dc}">
+          ${signal.direction === 'BUY' ? '↗' : '↙'} ${signal.direction}
+        </div>
+        <span class="sig-badge sig-badge-${status.toLowerCase()}">${status}</span>
+      </div>
+      <canvas class="sc-minichart" width="240" height="80"></canvas>
+      <div class="sc-meta-row">
+        <span>${signal.symbolLabel || '—'}</span>
+        <span>${signal.timeframe   || '—'}</span>
+        <span>${signal.session     || '—'}</span>
+      </div>
+      <div class="sc-conf-row">
+        <div class="sc-conf-track">
+          <div class="sc-conf-fill" style="
+            width:${signal.confidence}%;
+            background:${signal.confidence >= 67 ? '#39ff14' : signal.confidence >= 34 ? '#ffcc00' : '#ff4444'};
+          "></div>
+        </div>
+        <span class="sc-conf-pct">${signal.confidence}%</span>
+      </div>
+      ${b ? `
+      <div class="sc-budget-row">
+        <span class="sc-bchip">$${b.suggestedStake}</span>
+        <span class="sc-bchip sc-tp">TP ${b.tpPrice}</span>
+        <span class="sc-bchip sc-sl">SL ${b.slPrice}</span>
+        <span class="sc-bchip">R:R ${b.rr}:1</span>
+      </div>` : ''}
+      <div class="sc-patterns-row">
+        ${(signal.patterns || []).slice(0, 3).map(p =>
+          `<span class="wls-badge ${p.bias}">${p.name}</span>`
+        ).join('')}
+      </div>
+      <div class="sc-time">${fmtTime(signal.time)}</div>
+      <button class="fx-btn sc-view-btn">View Full Analysis →</button>
+    `;
+
+    // Draw mini chart once via RAF — chart drawn from stored dataURL, no recalculation
+    requestAnimationFrame(() => {
+      const mc = card.querySelector('.sc-minichart');
+      if (mc && window.ChartRenderer) ChartRenderer.drawSignalChart(mc, signal);
+    });
+
+    card.querySelector('.sc-view-btn').addEventListener('click', () => openModal(signal));
+
+    _cardCache.set(signal.id, card);
+    return card;
+  }
+
+  // ══════════════════════════════════════════════
+  // STATS BAR — touches only text nodes
+  // ══════════════════════════════════════════════
+  function updateStatsBar(all) {
+    const wins   = all.filter(s => s.outcome === 'WIN').length;
+    const losses = all.filter(s => s.outcome === 'LOSS').length;
+    const resolved = wins + losses;
+
+    document.getElementById('stb-total').textContent   = all.length;
+    document.getElementById('stb-wins').textContent    = wins;
+    document.getElementById('stb-losses').textContent  = losses;
+    document.getElementById('stb-wr').textContent      =
+      all.length > 0 ? Math.round((wins / all.length) * 100) + '%' : '—%';
+
+    // Accuracy: wins / (wins + losses) — excludes expired
+    const accEl = document.getElementById('stb-accuracy');
+    if (accEl) {
+      if (resolved === 0) {
+        accEl.textContent = '—';
+      } else {
+        accEl.textContent = `${wins} of ${resolved}`;
+      }
+    }
+  }
+
+  // ══════════════════════════════════════════════
+  // RENDER GRID — rebuilds the history card grid
+  // Called only on filter/sort change or throttled refresh
+  // ══════════════════════════════════════════════
+  function renderGrid() {
+    if (!window.SignalStore) return;
+    const all  = SignalStore.getAll();
+    let sigs   = [...all];
+
+    if (_filter === 'BUY')     sigs = sigs.filter(s => s.direction === 'BUY');
+    if (_filter === 'SELL')    sigs = sigs.filter(s => s.direction === 'SELL');
+    if (_filter === 'WIN')     sigs = sigs.filter(s => s.outcome === 'WIN');
+    if (_filter === 'LOSS')    sigs = sigs.filter(s => s.outcome === 'LOSS');
+    if (_filter === 'EXPIRED') sigs = sigs.filter(s =>
+      s.outcome === 'EXPIRED' || (s.outcome === null && s.expiresAt && Date.now() > s.expiresAt)
+    );
+    if (_filter === 'HIGH')    sigs = sigs.filter(s => s.confidence >= 70);
+
+    if (_sort === 'newest')     sigs.sort((a, b) => b.time - a.time);
+    if (_sort === 'oldest')     sigs.sort((a, b) => a.time - b.time);
+    if (_sort === 'confidence') sigs.sort((a, b) => b.confidence - a.confidence);
+    if (_sort === 'score')      sigs.sort((a, b) => Math.abs(b.score) - Math.abs(a.score));
+
+    const grid = document.getElementById('signals-grid');
+
+    // Use a DocumentFragment to batch DOM insertions
+    const frag = document.createDocumentFragment();
+
+    if (sigs.length === 0) {
+      const empty = mk('div', 'sig-empty');
+      empty.innerHTML = `
+        <div class="sig-empty-icon">🔍</div>
+        <div class="sig-empty-text">
+          No signals match this filter.<br/>
+          <small>Try a different filter or wait for the Watcher to issue more signals.</small>
+        </div>`;
+      frag.appendChild(empty);
+    } else {
+      sigs.forEach(s => frag.appendChild(getOrMakeHistoryCard(s)));
+    }
+
+    // Single DOM write — replaces children without innerHTML thrash
+    grid.replaceChildren(frag);
+  }
+
+  // ══════════════════════════════════════════════
+  // LEARNING STATS
+  // ══════════════════════════════════════════════
+  function renderLearning() {
+    if (!window.LearningEngine) return;
+    const data  = LearningEngine.getStats();
+    const grid  = document.getElementById('learning-grid');
+    if (!data || !data.patterns || Object.keys(data.patterns).length === 0) {
+      grid.innerHTML = '<div class="learning-empty">No learning data yet. Accumulates after first resolved signals.</div>';
+      return;
+    }
+    const frag   = document.createDocumentFragment();
+    const sorted = Object.entries(data.patterns)
+      .map(([name, rec]) => ({ name, ...rec }))
+      .sort((a, b) => b.total - a.total);
+
+    sorted.forEach(rec => {
+      const wr  = rec.total > 0 ? rec.wins / rec.total : 0;
+      const col = wr >= 0.6 ? '#39ff14' : wr >= 0.4 ? '#ffcc00' : '#ff4444';
+      const c   = mk('div', 'lstat-card');
+      c.innerHTML = `
+        <div class="lstat-name">${rec.name}</div>
+        <div class="lstat-bar-row">
+          <div class="lstat-track">
+            <div class="lstat-fill" style="width:${Math.round(wr*100)}%;background:${col};"></div>
+          </div>
+          <span class="lstat-wr" style="color:${col}">${Math.round(wr*100)}%</span>
+        </div>
+        <div class="lstat-meta">${rec.wins}W / ${rec.losses}L &nbsp;·&nbsp; Weight: <strong>${(rec.weight||0).toFixed(2)}</strong></div>
+      `;
+      frag.appendChild(c);
+    });
+
+    if (data.totalSignals > 0) {
+      const sum = mk('div', 'lstat-summary');
+      sum.innerHTML = `
+        Overall: <strong>${data.wins}</strong> wins / <strong>${data.losses}</strong> losses
+        across <strong>${data.totalSignals}</strong> resolved signals.
+        Win rate: <strong style="color:${data.winRate>=0.5?'#39ff14':'#ff4444'}">${(data.winRate*100).toFixed(1)}%</strong>
+      `;
+      frag.appendChild(sum);
+    }
+    grid.replaceChildren(frag);
+  }
+
+  // ══════════════════════════════════════════════
+  // MAIN RENDER — exposed to app.js UIBridge
+  // Keeps active card + stats bar always fresh.
+  // Rebuilds history grid only when needed.
+  // ══════════════════════════════════════════════
+  function renderAll() {
+    if (!window.SignalStore) return;
+    const all  = SignalStore.getAll();
+
+    updateStatsBar(all);
+
+    // Active card
+    const live = window.BriNovs?.currentSignal;
+    if (live && live.direction !== 'WAIT') {
+      renderActiveCard(live);
+    } else {
+      const stored = SignalStore.getActive();
+      renderActiveCard(stored || null);
+    }
+
+    renderGrid();
+    renderLearning();
+  }
+
+  window.renderSignalsPage  = renderAll;
+  window.renderLearningStats = renderLearning;
+
+  // ══════════════════════════════════════════════
+  // MARKET SELECTOR
+  // ══════════════════════════════════════════════
+  const TF_MAP = { 1:'T1', 60:'M1', 120:'M2', 300:'M5', 600:'M10', 900:'M15', 1800:'M30', 3600:'H1', 14400:'H4' };
+
+  function syncMarketStatus() {
+    if (!window.BriNovs) return;
+    const dot = document.getElementById('mkt-status-dot');
+    const txt = document.getElementById('mkt-status-txt');
+    const sym = document.getElementById('mkt-active-sym');
+    const tf  = document.getElementById('mkt-active-tf');
+    if (!dot || !txt) return;
+    const ok = BriNovs.isConnected;
+    dot.style.background = ok ? '#39ff14' : '#ff4444';
+    dot.style.boxShadow  = ok ? '0 0 6px #39ff14' : '0 0 6px #ff4444';
+    txt.textContent      = ok ? 'Live' : 'Reconnecting…';
+    txt.style.color      = ok ? '#39ff14' : '#ff4444';
+    if (sym) sym.textContent = BriNovs.symbolLabel || 'EUR/USD';
+    if (tf)  tf.textContent  = TF_MAP[BriNovs.granularity] || 'M1';
+  }
+
+  function switchMarket(sym, label, gran) {
+    if (!window.DerivFeed) return;
+
+    document.querySelectorAll('.mkt-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.mkt-btn[data-sym="${sym}"]`)?.classList.add('active');
+
+    // If 1s index, force T1 timeframe active
+    if (gran === 1) {
+      document.querySelectorAll('.mkt-tf').forEach(b => b.classList.remove('active'));
+      document.querySelector('.mkt-tf[data-gran="1"]')?.classList.add('active');
+      _currentGran = 1;
+    }
+
+    const dotEl = document.getElementById('mkt-status-dot');
+    const txtEl = document.getElementById('mkt-status-txt');
+    const symEl = document.getElementById('mkt-active-sym');
+    if (symEl) symEl.textContent = label;
+    if (dotEl) { dotEl.style.background = '#ffcc00'; dotEl.style.boxShadow = '0 0 6px #ffcc00'; }
+    if (txtEl) { txtEl.textContent = 'Switching…'; txtEl.style.color = '#ffcc00'; }
+
+    // Clear active card — new market, new signal
+    _activeCardSignalId = null;
+    if (_timerInterval) { clearInterval(_timerInterval); _timerInterval = null; }
+    document.getElementById('active-signal-wrap').innerHTML = `
+      <div class="sig-waiting glass-box">
+        <span class="sig-wait-icon">📡</span>
+        <span class="sig-wait-text">
+          Switching to <strong>${label} ${TF_MAP[_currentGran]||''}</strong>…<br/>
+          Loading 500 candles. Watcher will re-analyse immediately.
+        </span>
+      </div>`;
+
+    DerivFeed.changeSymbol(sym, label, _currentGran);
+  }
+
+  document.querySelectorAll('.mkt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const gran = parseInt(btn.dataset.gran) || _currentGran;
+      switchMarket(btn.dataset.sym, btn.dataset.label, gran);
+    });
+  });
+
+  document.querySelectorAll('.mkt-tf').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mkt-tf').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      _currentGran = parseInt(btn.dataset.gran);
+      const activeBtn = document.querySelector('.mkt-btn.active');
+      if (activeBtn) switchMarket(activeBtn.dataset.sym, activeBtn.dataset.label, _currentGran);
+    });
+  });
+
+  // ══════════════════════════════════════════════
+  // HELPERS
+  // ══════════════════════════════════════════════
+  function mk(tag, cls) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    return e;
+  }
+
+  function fmtTime(ts) {
+    return ts ? new Date(ts).toLocaleString() : '—';
+  }
+
+  // ══════════════════════════════════════════════
+  // POLL — every 10s, not 4s
+  // Only syncs status dot + active card timer.
+  // Full renderAll() is triggered by app.js throttle.
+  // ══════════════════════════════════════════════
+  setInterval(() => {
+    syncMarketStatus();
+    // Light active card timer update — no DOM rebuild
+    if (window.BriNovs?.currentSignal && BriNovs.currentSignal.direction !== 'WAIT') {
+      renderActiveCard(BriNovs.currentSignal);
+    }
+  }, 10000);
+
+  // ── Initial render after app.js boot ──
+  setTimeout(() => {
+    if (window.SignalStore) renderAll();
+    syncMarketStatus();
+  }, 1500);
+  </script>
+</body>
+</html>
