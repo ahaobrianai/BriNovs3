@@ -1,0 +1,472 @@
+/* ═══════════════════════════════════════════
+   BriNovs FX Engine — userpanel.css
+   User Panel Page Styles
+═══════════════════════════════════════════ */
+
+/* ── Page layout ── */
+.panel-main {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px 24px;
+  flex: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── Page title row ── */
+.panel-title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.panel-title-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.panel-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  color: var(--text-main);
+  text-transform: uppercase;
+}
+
+.panel-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+/* ══════════════════════════════════════
+   PANEL CARDS — shared base
+══════════════════════════════════════ */
+.panel-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 20px;
+  border-radius: var(--radius);
+}
+
+.panel-card-title {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(130, 190, 255, 0.12);
+}
+
+/* ══════════════════════════════════════
+   API STATUS BANNER
+══════════════════════════════════════ */
+.api-status-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(130, 190, 255, 0.15);
+  background: rgba(8, 22, 58, 0.45);
+}
+
+.api-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: #8ab4d8;
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+.api-status-dot.connected {
+  background: var(--green-neon);
+  box-shadow: 0 0 8px var(--green-neon);
+}
+
+.api-status-dot.validating {
+  background: var(--yellow-sig);
+  box-shadow: 0 0 8px var(--yellow-sig);
+  animation: pulse-glow 1.2s ease-in-out infinite;
+}
+
+.api-status-dot.invalid,
+.api-status-dot.error {
+  background: var(--red-sig);
+  box-shadow: 0 0 8px var(--red-sig);
+}
+
+.api-status-text {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: 0.06em;
+}
+
+.api-status-sub {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  margin-left: auto;
+}
+
+/* ══════════════════════════════════════
+   API KEY INPUT SECTION
+══════════════════════════════════════ */
+.token-input-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.token-label {
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+
+.token-field-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.token-input {
+  flex: 1;
+  background: rgba(5, 15, 45, 0.65);
+  border: 1px solid rgba(120, 180, 255, 0.28);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.token-input:focus {
+  border-color: rgba(126, 184, 247, 0.55);
+  box-shadow: 0 0 0 2px rgba(126, 184, 247, 0.1);
+}
+
+.token-input::placeholder {
+  color: rgba(130, 180, 255, 0.3);
+  letter-spacing: 0.04em;
+}
+
+.token-toggle-vis {
+  background: rgba(20, 50, 100, 0.45);
+  border: 1px solid rgba(120, 180, 255, 0.22);
+  border-radius: var(--radius-sm);
+  color: var(--text-soft);
+  font-size: 1rem;
+  padding: 0 12px;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.token-toggle-vis:hover {
+  color: var(--text-main);
+  border-color: rgba(150, 200, 255, 0.4);
+}
+
+.token-submit-btn {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  padding: 0 18px;
+  letter-spacing: 0.08em;
+}
+
+.token-hint {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  line-height: 1.55;
+  opacity: 0.8;
+}
+
+.token-hint a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(126, 184, 247, 0.35);
+}
+
+.token-hint a:hover { opacity: 0.8; }
+
+/* ── Feedback message ── */
+.token-feedback {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  display: none;
+  line-height: 1.5;
+}
+
+.token-feedback.show    { display: block; }
+
+.token-feedback.success {
+  background: rgba(57, 255, 20, 0.07);
+  border: 1px solid rgba(57, 255, 20, 0.3);
+  color: var(--green-neon);
+}
+
+.token-feedback.error {
+  background: rgba(255, 58, 58, 0.07);
+  border: 1px solid rgba(255, 58, 58, 0.3);
+  color: var(--red-sig);
+}
+
+.token-feedback.info {
+  background: rgba(126, 184, 247, 0.07);
+  border: 1px solid rgba(126, 184, 247, 0.28);
+  color: var(--accent-blue);
+}
+
+/* ══════════════════════════════════════
+   HOW-TO TOKEN GUIDE
+══════════════════════════════════════ */
+.token-guide {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.guide-step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.guide-num {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  background: rgba(126, 184, 247, 0.1);
+  border: 1px solid rgba(126, 184, 247, 0.25);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.guide-text {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  line-height: 1.55;
+}
+
+.guide-text a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(126, 184, 247, 0.3);
+  transition: opacity 0.2s;
+}
+
+.guide-text a:hover { opacity: 0.75; }
+
+.guide-text strong { color: var(--text-main); }
+
+/* ══════════════════════════════════════
+   ACCOUNT INFORMATION CARD
+══════════════════════════════════════ */
+.account-card {
+  display: none;
+}
+
+.account-card.visible { display: flex; }
+
+.account-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.acc-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px;
+  background: rgba(8, 22, 58, 0.5);
+  border: 1px solid rgba(100, 160, 255, 0.16);
+  border-radius: var(--radius-sm);
+}
+
+.acc-label {
+  font-family: var(--font-display);
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+
+.acc-val {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+  word-break: break-all;
+}
+
+/* ══════════════════════════════════════
+   WALLET BALANCE CARD
+══════════════════════════════════════ */
+.wallet-card {
+  display: none;
+}
+
+.wallet-card.visible { display: flex; }
+
+.wallet-balance-display {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.wallet-currency {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  letter-spacing: 0.1em;
+}
+
+.wallet-amount {
+  font-family: var(--font-mono);
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--green-neon);
+  text-shadow:
+    0 0 16px rgba(57, 255, 20, 0.45),
+    0 0 32px rgba(57, 255, 20, 0.2);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.wallet-live-badge {
+  font-family: var(--font-display);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: rgba(57, 255, 20, 0.1);
+  border: 1px solid rgba(57, 255, 20, 0.35);
+  color: var(--green-neon);
+  margin-left: 4px;
+  align-self: center;
+}
+
+.wallet-sub {
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  color: var(--text-soft);
+  margin-top: 4px;
+}
+
+/* ══════════════════════════════════════
+   LOGIN / OAUTH CARD (deferred)
+══════════════════════════════════════ */
+.oauth-card {
+  opacity: 0.55;
+}
+
+.oauth-soon-badge {
+  font-family: var(--font-display);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  padding: 2px 9px;
+  border-radius: 20px;
+  background: rgba(255, 204, 0, 0.1);
+  border: 1px solid rgba(255, 204, 0, 0.32);
+  color: var(--yellow-sig);
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.oauth-desc {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  line-height: 1.55;
+}
+
+.oauth-btn-disabled {
+  font-size: 0.8rem;
+  opacity: 0.45;
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════════
+   CLEAR SESSION CARD
+══════════════════════════════════════ */
+.clear-session-card {
+  display: none;
+}
+
+.clear-session-card.visible { display: flex; }
+
+.clear-session-desc {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  line-height: 1.55;
+}
+
+.clear-session-btn {
+  background: rgba(160, 30, 30, 0.25) !important;
+  border-color: rgba(255, 80, 80, 0.35) !important;
+  color: #ffaaaa !important;
+  font-size: 0.78rem;
+  align-self: flex-start;
+}
+
+.clear-session-btn:hover {
+  background: rgba(200, 40, 40, 0.38) !important;
+  border-color: rgba(255, 100, 100, 0.55) !important;
+  color: #fff !important;
+  box-shadow: 0 0 14px rgba(255, 60, 60, 0.25) !important;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 600px) {
+  .panel-main       { padding: 14px 14px; }
+  .account-grid     { grid-template-columns: 1fr; }
+  .token-field-row  { flex-direction: column; }
+  .token-submit-btn { padding: 10px; width: 100%; }
+  .token-toggle-vis { width: 100%; justify-content: center; }
+  .wallet-amount    { font-size: 1.8rem; }
+  .panel-card       { padding: 14px 14px; }
+}
+
+@media (max-width: 400px) {
+  .wallet-amount    { font-size: 1.5rem; }
+  .panel-title      { font-size: 0.85rem; }
+}
