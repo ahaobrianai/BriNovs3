@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invisible Watcher — BriNovs FX Engine</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="watcher.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ═══════════════════ HEADER (shared) ═══════════════════ -->
+  <header class="header glass-border">
+    <div class="header-brand">
+      <img src="https://cdn.phototourl.com/free/2026-04-03-cfdc5ddf-4cfa-4d61-b9bd-ea00ff47f1f6.png" alt="BriNovs Logo" class="brand-logo" />
+      <div class="brand-name-box glass-mini">
+        <div class="brand-text">
+          <span class="brand-line1">BriNovs <span class="fx-green">FX</span></span>
+          <span class="brand-line2">Engine</span>
+        </div>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <a href="index.html" class="nav-tab">Dashboard</a>
+      <a href="#" class="nav-tab">Strategies</a>
+      <a href="watcher.html" class="nav-tab active">Signal</a>
+    </nav>
+    <div class="header-right">
+      <div class="user-profile glass-mini">
+        <svg class="user-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="15" r="8" fill="#8aa8c8"/>
+          <ellipse cx="20" cy="36" rx="14" ry="9" fill="#8aa8c8"/>
+        </svg>
+        <span class="user-label">User</span>
+        <button class="menu-lines" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="clock-block">
+        <div class="clock-timezone-row">
+          <div class="clock-display">
+            <span id="clock-time" class="digital-time">00:00:00</span>
+          </div>
+          <select id="tz-select" class="tz-toggle glass-mini">
+            <option value="Africa/Nairobi">EAT</option>
+            <option value="Europe/London">GMT</option>
+            <option value="UTC">UTC</option>
+            <option value="Africa/Harare">CAT</option>
+          </select>
+        </div>
+        <div class="clock-date">
+          <span id="clock-date" class="digital-date">00/00/0000</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════ WATCHER BODY ═══════════════════ -->
+  <main class="watcher-main">
+
+    <!-- TOP ROW: Live Signal Card + Stats -->
+    <div class="watcher-top-row">
+
+      <!-- Live Signal Card -->
+      <div class="watcher-card watcher-signal-card glass-box" id="watcher-live-signal">
+        <div class="watcher-card-label">LIVE SIGNAL</div>
+        <div class="wls-dir wait-color">— WAITING</div>
+        <div class="wls-prob">ANALYSING MARKET…</div>
+        <div class="wls-conf">Confidence: <strong>—%</strong></div>
+        <div class="wls-meta">Trend: — &nbsp;|&nbsp; RSI: — &nbsp;|&nbsp; Score: —</div>
+        <div class="wls-patterns"></div>
+      </div>
+
+      <!-- Market Stats Card -->
+      <div class="watcher-card glass-box">
+        <div class="watcher-card-label">MARKET STATS</div>
+        <div class="wstats-grid">
+          <div class="wstat-item">
+            <span class="wstat-label">TREND</span>
+            <span class="wstat-val" id="stat-trend">—</span>
+          </div>
+          <div class="wstat-item">
+            <span class="wstat-label">RSI</span>
+            <span class="wstat-val" id="stat-rsi">—</span>
+          </div>
+          <div class="wstat-item">
+            <span class="wstat-label">ATR</span>
+            <span class="wstat-val" id="stat-atr">—</span>
+          </div>
+          <div class="wstat-item">
+            <span class="wstat-label">CANDLES</span>
+            <span class="wstat-val" id="stat-candles">—</span>
+          </div>
+          <div class="wstat-item">
+            <span class="wstat-label">S/R ZONES</span>
+            <span class="wstat-val" id="stat-zones">—</span>
+          </div>
+          <div class="wstat-item">
+            <span class="wstat-label">SYMBOL</span>
+            <span class="wstat-val" id="stat-symbol">EUR/USD</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- S/R Zones Card -->
+      <div class="watcher-card glass-box">
+        <div class="watcher-card-label">SUPPORT &amp; RESISTANCE</div>
+        <div id="sr-zones-list" class="sr-zones-list">
+          <span class="watcher-placeholder">Detecting zones…</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SYMBOL SELECTOR -->
+    <div class="watcher-symbol-bar glass-box">
+      <span class="symbol-bar-label">INSTRUMENT</span>
+      <div class="symbol-buttons">
+        <button class="sym-btn active" data-sym="frxEURUSD" data-gran="60">EUR/USD</button>
+        <button class="sym-btn" data-sym="frxGBPUSD" data-gran="60">GBP/USD</button>
+        <button class="sym-btn" data-sym="frxUSDJPY" data-gran="60">USD/JPY</button>
+        <button class="sym-btn" data-sym="frxAUDUSD" data-gran="60">AUD/USD</button>
+        <button class="sym-btn" data-sym="frxUSDCAD" data-gran="60">USD/CAD</button>
+        <button class="sym-btn" data-sym="R_100"    data-gran="60">Volatility 100</button>
+        <button class="sym-btn" data-sym="R_75"     data-gran="60">Volatility 75</button>
+        <button class="sym-btn" data-sym="R_50"     data-gran="60">Volatility 50</button>
+      </div>
+      <span class="symbol-bar-label">TIMEFRAME</span>
+      <div class="symbol-buttons">
+        <button class="tf-btn active" data-gran="60">M1</button>
+        <button class="tf-btn" data-gran="300">M5</button>
+        <button class="tf-btn" data-gran="900">M15</button>
+        <button class="tf-btn" data-gran="3600">H1</button>
+        <button class="tf-btn" data-gran="14400">H4</button>
+      </div>
+    </div>
+
+    <!-- MAIN SPLIT: Watcher Screen + Pattern Log -->
+    <div class="watcher-split">
+
+      <!-- LEFT: The Watcher Screen (narration feed) -->
+      <div class="watcher-screen-wrap glass-box">
+        <div class="watcher-screen-header">
+          <span class="pulse-dot"></span>
+          <span class="watcher-screen-title">INVISIBLE WATCHER — LIVE ANALYSIS</span>
+        </div>
+        <div class="watcher-screen-intro">
+          The Invisible Watcher studies the market using candlestick patterns, trend structure,
+          support &amp; resistance zones, RSI momentum, ATR volatility, and heat zone confluence.
+          It narrates every observation in real time.
+        </div>
+        <div class="watcher-feed" id="watcher-feed">
+          <div class="watcher-entry watcher-system">
+            <span class="w-time">--:--:--</span>
+            <span class="w-msg">Invisible Watcher initialising… connecting to live market feed.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Pattern Detected + Confidence History -->
+      <div class="watcher-right-col">
+
+        <!-- Current Patterns Box -->
+        <div class="watcher-card glass-box watcher-patterns-box">
+          <div class="watcher-card-label">PATTERNS DETECTED (CURRENT)</div>
+          <div id="current-patterns" class="patterns-list">
+            <span class="watcher-placeholder">Scanning…</span>
+          </div>
+        </div>
+
+        <!-- Confidence History -->
+        <div class="watcher-card glass-box">
+          <div class="watcher-card-label">CONFIDENCE HISTORY</div>
+          <canvas id="conf-history-canvas" class="conf-history-canvas"></canvas>
+        </div>
+
+        <!-- Signal History -->
+        <div class="watcher-card glass-box watcher-signal-history">
+          <div class="watcher-card-label">SIGNAL HISTORY</div>
+          <div id="signal-history-list" class="signal-history-list">
+            <span class="watcher-placeholder">No signals yet.</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <footer class="footer glass-border">
+    <div class="footer-dev">
+      <span>DEV: Brian Ahao</span>
+      <img src="https://cdn.phototourl.com/free/2026-04-05-4e830679-3015-4379-8cd4-90597f4cd56f.png" alt="Dev" class="dev-pic" />
+    </div>
+    <div class="footer-contact">
+      <a href="#" class="contact-link">CONTACTS: <span class="click-here">Click Here</span></a>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    // ── Clock (same as index) ──
+    function updateClock() {
+      const tz = document.getElementById('tz-select').value;
+      const now = new Date();
+      document.getElementById('clock-time').textContent =
+        now.toLocaleTimeString('en-GB', { timeZone: tz, hour12: false });
+      document.getElementById('clock-date').textContent =
+        new Intl.DateTimeFormat('en-GB', { timeZone: tz, day:'2-digit', month:'2-digit', year:'numeric' }).format(now);
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+    document.getElementById('tz-select').addEventListener('change', updateClock);
+
+    // ── Confidence history sparkline ──
+    const confHistory = [];
+    const confCanvas  = document.getElementById('conf-history-canvas');
+    const confCtx     = confCanvas ? confCanvas.getContext('2d') : null;
+
+    function drawConfHistory() {
+      if (!confCtx || confHistory.length < 2) return;
+      const w = confCanvas.width  = confCanvas.offsetWidth;
+      const h = confCanvas.height = 80;
+      confCtx.clearRect(0, 0, w, h);
+      const step = w / (confHistory.length - 1);
+      confCtx.beginPath();
+      confHistory.forEach((v, i) => {
+        const x = i * step;
+        const y = h - (v / 100) * h;
+        i === 0 ? confCtx.moveTo(x, y) : confCtx.lineTo(x, y);
+      });
+      confCtx.strokeStyle = '#7eb8f7';
+      confCtx.lineWidth   = 2;
+      confCtx.shadowColor = '#7eb8f7';
+      confCtx.shadowBlur  = 6;
+      confCtx.stroke();
+    }
+
+    // ── Symbol buttons ──
+    let currentGran = 60;
+    document.querySelectorAll('.sym-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.sym-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('stat-symbol').textContent = btn.textContent;
+        DerivFeed.changeSymbol(btn.dataset.sym, currentGran);
+      });
+    });
+
+    document.querySelectorAll('.tf-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentGran = parseInt(btn.dataset.gran);
+        const activeSym = document.querySelector('.sym-btn.active');
+        if (activeSym) DerivFeed.changeSymbol(activeSym.dataset.sym, currentGran);
+      });
+    });
+
+    // ── Poll BriNovs state to update watcher stats ──
+    function updateWatcherStats() {
+      if (!window.BriNovs) return;
+      const B = window.BriNovs;
+      const sig = B.currentSignal;
+
+      // Stats
+      const el = id => document.getElementById(id);
+      if (el('stat-trend'))   el('stat-trend').textContent   = B.trend;
+      if (el('stat-candles')) el('stat-candles').textContent = B.candles.length;
+      if (el('stat-zones'))   el('stat-zones').textContent   = B.srZones.length;
+
+      if (sig) {
+        if (el('stat-rsi')) el('stat-rsi').textContent = sig.rsi;
+        if (el('stat-atr')) el('stat-atr').textContent = sig.atr;
+
+        // Confidence history
+        confHistory.push(sig.confidence);
+        if (confHistory.length > 60) confHistory.shift();
+        drawConfHistory();
+
+        // Current patterns
+        const pBox = document.getElementById('current-patterns');
+        if (pBox) {
+          if (sig.patterns.length === 0) {
+            pBox.innerHTML = '<span class="watcher-placeholder">No strong patterns on current candle.</span>';
+          } else {
+            pBox.innerHTML = sig.patterns.map(p => `
+              <div class="pattern-card ${p.bias}">
+                <div class="pattern-name">${p.name}</div>
+                <div class="pattern-desc">${p.desc}</div>
+                <div class="pattern-strength">${'●'.repeat(p.strength)}${'○'.repeat(5 - p.strength)}</div>
+              </div>
+            `).join('');
+          }
+        }
+
+        // Signal history
+        if (sig.direction !== 'WAIT') {
+          const hist = document.getElementById('signal-history-list');
+          if (hist) {
+            const placeholder = hist.querySelector('.watcher-placeholder');
+            if (placeholder) placeholder.remove();
+            const row = document.createElement('div');
+            row.className = `sh-row sh-${sig.direction.toLowerCase()}`;
+            const t = new Date(sig.time).toLocaleTimeString();
+            row.innerHTML = `
+              <span class="sh-dir">${sig.direction === 'BUY' ? '↗' : '↙'} ${sig.direction}</span>
+              <span class="sh-conf">${sig.confidence}%</span>
+              <span class="sh-prob">${sig.probability}</span>
+              <span class="sh-time">${t}</span>
+            `;
+            hist.prepend(row);
+            while (hist.children.length > 30) hist.removeChild(hist.lastChild);
+          }
+        }
+      }
+
+      // S/R Zones
+      const srList = document.getElementById('sr-zones-list');
+      if (srList && B.srZones.length > 0) {
+        srList.innerHTML = B.srZones.map(z => `
+          <div class="sr-zone-row ${z.type}">
+            <span class="sr-type">${z.type.toUpperCase()}</span>
+            <span class="sr-price">${z.price.toFixed(5)}</span>
+            <span class="sr-touches">${z.touches}× tested</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    setInterval(updateWatcherStats, 1500);
+  </script>
+
+</body>
+</html>
